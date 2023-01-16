@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:neo4j="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="8" author="IW">
+        <comment>create fire</comment>
+        <neo4j:cypher>
+            CREATE (:Ingredient {
+                name:'Fire',
+                price:0,
+                loss_probability:0
+            })
+        </neo4j:cypher>
+    </changeSet>
+
+    <changeSet id="9" author="IW">
+        <comment>create water</comment>
+        <neo4j:cypher>
+            CREATE (:Ingredient {
+                name:'Water',
+                price:0,
+                loss_probability:0
+            })
+        </neo4j:cypher>
+    </changeSet>
+
+    <changeSet id="10" author="IW">
+        <comment>create earth</comment>
+        <neo4j:cypher>
+            CREATE (:Ingredient {
+                name:'Earth',
+                price:0,
+                loss_probability:0
+            })
+        </neo4j:cypher>
+    </changeSet>
+
+    <changeSet id="11" author="IW">
+        <comment>create wind</comment>
+        <neo4j:cypher>
+            CREATE (:Ingredient {
+                name:'Wind',
+                price:0,
+                loss_probability:0
+            })
+        </neo4j:cypher>
+    </changeSet>
+
+    <changeSet id="12" author="IW">
+        <comment>create constraint for ingredient name and id is unique</comment>
+        <neo4j:cypher>
+            CREATE CONSTRAINT ingredient_name_and_id_uniqueness IF NOT EXISTS FOR (i:Ingredient) REQUIRE (i.name,i.id) IS UNIQUE;
+        </neo4j:cypher>
+    </changeSet>
+
+</databaseChangeLog>

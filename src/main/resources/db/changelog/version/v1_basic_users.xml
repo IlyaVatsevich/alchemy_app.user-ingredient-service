@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:neo4j="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="2" author="IW">
+        <comment>create basic users</comment>
+        <neo4j:cypher>
+            CREATE (:User {
+                mail:'user_1@yopmail.com',
+                login:'user_1',
+                password:'$2a$12$lHgsIRlkvVpTjS0pWEdm7OnzZv2hYuAMHsBWY64paG0IGAnVz/nCC',
+                gold:100
+            });
+        </neo4j:cypher>
+    </changeSet>
+
+    <changeSet id="3" author="IW">
+        <comment>create basic users</comment>
+        <neo4j:cypher>
+            CREATE (:User {
+                mail:'admin_1@yopmail.com',
+                login:'admin_1',
+                password:'$2a$12$lHgsIRlkvVpTjS0pWEdm7OnzZv2hYuAMHsBWY64paG0IGAnVz/nCC',
+                gold:100
+            });
+        </neo4j:cypher>
+    </changeSet>
+
+    <changeSet id="4" author="IW">
+        <comment>create roles</comment>
+        <neo4j:cypher>
+            CREATE (:UserRole {role_name:'USER'}),
+                   (:UserRole {role_name:'ADMIN'});
+        </neo4j:cypher>
+    </changeSet>
+
+    <changeSet id="5" author="IW">
+        <comment>set role for admin_1</comment>
+        <neo4j:cypher>
+            MATCH
+                (u:User),
+                (ur:UserRole)
+            WHERE u.login = 'admin_1' AND ur.role_name = 'ADMIN'
+            CREATE (u)-[r:HAS_A_ROLE]->(ur);
+        </neo4j:cypher>
+    </changeSet>
+
+    <changeSet id="6" author="IW">
+        <comment>set role for user_1</comment>
+        <neo4j:cypher>
+            MATCH
+                (u:User),
+                (ur:UserRole)
+            WHERE u.login = 'user_1' AND ur.role_name = 'USER'
+            CREATE (u)-[r:HAS_A_ROLE]->(ur);
+        </neo4j:cypher>
+    </changeSet>
+
+    <changeSet id="7" author="IW">
+        <comment>create constraint for unique user properties</comment>
+        <neo4j:cypher>
+            CREATE CONSTRAINT user_properties_uniqueness IF NOT EXISTS FOR (u:User) REQUIRE (u.mail,u.id,u.login) IS UNIQUE;
+        </neo4j:cypher>
+    </changeSet>
+
+</databaseChangeLog>

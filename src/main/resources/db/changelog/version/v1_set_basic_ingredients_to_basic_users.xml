@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:neo4j="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="13" author="IW">
+        <comment>set basic ingredients to user_1</comment>
+        <neo4j:cypher>
+            MATCH
+                (u:User{login:'user_1'}),
+                (i1:Ingredient{name:'Earth'}),
+                (i2:Ingredient{name:'Wind'}),
+                (i3:Ingredient{name:'Water'}),
+                (i4:Ingredient{name:'Fire'})
+            CREATE
+                (u)-[:OBTAIN {count:1}]->(i1),
+                (u)-[:OBTAIN {count:1}]->(i2),
+                (u)-[:OBTAIN {count:1}]->(i3),
+                (u)-[:OBTAIN {count:1}]->(i4)
+        </neo4j:cypher>
+    </changeSet>
+
+    <changeSet id="14" author="IW">
+        <comment>set basic ingredients to admin_1</comment>
+        <neo4j:cypher>
+            MATCH
+            (u:User{login:'admin_1'}),
+                (i1:Ingredient{name:'Earth'}),
+                (i2:Ingredient{name:'Wind'}),
+                (i3:Ingredient{name:'Water'}),
+                (i4:Ingredient{name:'Fire'})
+            CREATE
+                (u)-[:OBTAIN {count:1}]->(i1),
+                (u)-[:OBTAIN {count:1}]->(i2),
+                (u)-[:OBTAIN {count:1}]->(i3),
+                (u)-[:OBTAIN {count:1}]->(i4)
+        </neo4j:cypher>
+    </changeSet>
+
+</databaseChangeLog>
