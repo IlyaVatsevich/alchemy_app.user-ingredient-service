@@ -13,3 +13,5 @@ spring:
     driver-class-name: org.neo4j.jdbc.bolt.BoltDriver
   liquibase:
     change-log: classpath:/db/changelog/changelog-master.xml
+user:
+  start-gold: 100
