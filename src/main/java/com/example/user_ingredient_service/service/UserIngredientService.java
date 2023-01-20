@@ -17,8 +17,6 @@ public interface UserIngredientService {
 
     void initializeUserIngredient(User newUser);
 
-    void saveUserIngredient(Ingredient createdIngredient, Long count);
-
     Page<UserIngredientDto> getUserIngredient(@Valid @ValidSortProperty(
             allowedProperties = {"count","ingredient.name","ingredient.id","ingredient.price","ingredient.lossProbability"}) Pageable pageable);
 

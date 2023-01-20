@@ -6,6 +6,7 @@ import com.example.user_ingredient_service.entity.User;
 import com.example.user_ingredient_service.mapper.UserIngredientMapper;
 import com.example.user_ingredient_service.repository.IngredientRepository;
 import com.example.user_ingredient_service.repository.UserRepository;
+import com.example.user_ingredient_service.security.UserHolder;
 import com.example.user_ingredient_service.service.UserIngredientService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class UserIngredientServiceImpl implements UserIngredientService {
     private final UserRepository userRepository;
     private final IngredientRepository ingredientRepository;
     private final UserIngredientMapper userIngredientMapper;
+    private final UserHolder userHolder;
     private Set<Ingredient> basicIngredients;
 
     @PostConstruct
@@ -52,15 +54,13 @@ public class UserIngredientServiceImpl implements UserIngredientService {
     @Override
     public void initializeUserIngredient(User newUser) {
         newUser.setUserIngredients(userIngredientMapper.buildUserIngredients(basicIngredients));
-    }
-
-    @Override
-    public void saveUserIngredient(Ingredient createdIngredient, Long count) {
-
+        log.info("Inventory of user - {}  is initialized",newUser.getId());
     }
 
     @Override
     public Page<UserIngredientDto> getUserIngredient(Pageable pageable) {
-        return null;
+        Long userId = userHolder.getUser().getId();
+        return ingredientRepository.findUserIngredientByUserId(userId,pageable)
+                .map(userIngredientMapper::userIngredientToUserIngredientDto);
     }
 }

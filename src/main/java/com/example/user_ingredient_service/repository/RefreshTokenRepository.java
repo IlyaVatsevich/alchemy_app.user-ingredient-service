@@ -1,7 +1,6 @@
 package com.example.user_ingredient_service.repository;
 
 import com.example.user_ingredient_service.entity.RefreshToken;
-import com.example.user_ingredient_service.entity.User;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 
@@ -11,7 +10,7 @@ public interface RefreshTokenRepository extends Neo4jRepository<RefreshToken,Lon
 
     Optional<RefreshToken> findByToken(String token);
 
-    @Query(value = "MATCH (rt:RefreshToken)<-[:HAVE_TOKEN]-(u:User) WHERE u = $user RETURN rt;")
-    Optional<RefreshToken> findByUser(User user);
+    @Query(value = "MATCH (rt:RefreshToken)<-[ht:HAVE_TOKEN]-(u:User) WHERE ID(u) = $userId RETURN rt,ht,u;")
+    Optional<RefreshToken> findByUserId(Long userId);
 
 }

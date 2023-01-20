@@ -9,6 +9,7 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
+import org.springframework.security.core.GrantedAuthority;
 
 @Node("UserRole")
 @NoArgsConstructor
@@ -16,7 +17,12 @@ import org.springframework.data.neo4j.core.schema.Property;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserRole {
+public class UserRole implements GrantedAuthority {
+
+    @Override
+    public String getAuthority() {
+        return roleName.name();
+    }
 
     public enum RoleName {
         USER,ADMIN

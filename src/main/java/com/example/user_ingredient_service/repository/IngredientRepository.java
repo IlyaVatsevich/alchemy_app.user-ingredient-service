@@ -36,6 +36,6 @@ public interface IngredientRepository extends Neo4jRepository<Ingredient,Long> {
             :#{orderBy(#pageable)} SKIP $skip LIMIT $limit
             """,
             countQuery = "MATCH (u:User)-[o:OBTAIN]->() WHERE ID(u) = $userId RETURN count(o)" )
-    Page<User.UserIngredient> findUserIngredientByUser(Long userId, Pageable pageable);
+    Page<User.UserIngredient> findUserIngredientByUserId(Long userId, Pageable pageable);
 
 }

@@ -3,7 +3,6 @@ package com.example.user_ingredient_service.repository;
 import com.example.user_ingredient_service.entity.Ingredient;
 import com.example.user_ingredient_service.entity.User;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.neo4j.core.Neo4jTemplate;

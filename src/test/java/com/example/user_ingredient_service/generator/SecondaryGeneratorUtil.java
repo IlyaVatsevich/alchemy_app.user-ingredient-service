@@ -25,4 +25,10 @@ public class SecondaryGeneratorUtil {
                 findAny().
                 getAsInt();
     }
+
+    public static Short generateShortForValidLossProbability() {
+        return ((short) RND.ints(0, 100).
+                findAny().
+                getAsInt());
+    }
 }

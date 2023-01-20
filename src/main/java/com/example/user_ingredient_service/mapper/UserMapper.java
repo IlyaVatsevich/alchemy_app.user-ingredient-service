@@ -8,6 +8,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -20,6 +21,7 @@ public class UserMapper {
     @Value("${user.start-gold}")
     private int startGold;
     private final UserRoleRepository userRoleRepository;
+    private final PasswordEncoder passwordEncoder;
     private UserRole userRole;
 
     @PostConstruct
@@ -31,7 +33,7 @@ public class UserMapper {
         return User.builder().withGold(startGold)
                 .withLogin(userRegDto.getLogin())
                 .withMail(userRegDto.getMail())
-                .withPassword(userRegDto.getPassword())
+                .withPassword(passwordEncoder.encode(userRegDto.getPassword()))
                 .withRoles(Set.of(userRole))
                 .build();
     }
