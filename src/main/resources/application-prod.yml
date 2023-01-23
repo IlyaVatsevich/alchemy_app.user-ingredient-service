@@ -1,11 +1,14 @@
 server:
   port: 8080
 spring:
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_empty
   neo4j:
-    uri: ${DATASOURCE_URI:bolt://localhost:7687}
+    uri: ${DATASOURCE_URI:bolt://neo4j-db:7687}
     authentication:
       username: ${DATASOURCE_USERNAME:neo4j}
-      password: ${DATASOURCE_PASSWORD:secret}
+      password: ${DATASOURCE_PASSWORD:secretSecret}
   datasource:
     url: ${DATASOURCE_URL:jdbc:neo4j:${spring.neo4j.uri}}
     username: ${spring.neo4j.authentication.username}
@@ -22,3 +25,11 @@ security-custom:
     jwt-expiration: 7200000  # 2 hours
   refresh-token:
     expiration: 604800000 # 7 days
+open_api:
+  paths:
+    user_path:
+      /api/v1/user/**
+    ingredient_path:
+      /api/v1/ingredient/**
+    user_ingredient_path:
+      /api/v1/user_ingredient/**

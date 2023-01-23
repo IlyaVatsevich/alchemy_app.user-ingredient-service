@@ -39,15 +39,16 @@ public class SecurityConfig  {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(
-                        (request, response, ex) -> response.sendError(
-                                HttpServletResponse.SC_UNAUTHORIZED,
-                                ex.getMessage()
-                        )
-                )
+                .authenticationEntryPoint((request, response, authException) -> response.sendError(
+                        HttpServletResponse.SC_UNAUTHORIZED,
+                        authException.getMessage()
+                ) )
                 .and();
 
         http.authorizeHttpRequests()
+                .requestMatchers("/v3/api-docs/**",
+                        "/swagger-ui/**")
+                .permitAll()
                 .requestMatchers(
                         "/api/v1/user/registration",
                         "/api/v1/user/login",

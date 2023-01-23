@@ -1,8 +1,30 @@
 server:
   port: 8080
 spring:
+  datasource:
+    url: jdbc:neo4j:${spring.neo4j.uri}
+    username: ${spring.neo4j.authentication.username}
+    password: ${spring.neo4j.authentication.password}
+    driver-class-name: org.neo4j.jdbc.bolt.BoltDriver
   test:
     database:
       replace: none
   liquibase:
     change-log: classpath:/db/changelog/changelog-master.xml
+user:
+  start-gold: 100
+security-custom:
+  jwt-token:
+    jwt-secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
+    jwt-issuer: IW
+    jwt-expiration: 7200000  # 2 hours
+  refresh-token:
+    expiration: 604800000 # 7 days
+open_api:
+  paths:
+    user_path:
+      /api/v1/user/**
+    ingredient_path:
+      /api/v1/ingredient/**
+    user_ingredient_path:
+      /api/v1/user_ingredient/**

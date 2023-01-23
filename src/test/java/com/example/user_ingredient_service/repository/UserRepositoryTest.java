@@ -2,16 +2,12 @@ package com.example.user_ingredient_service.repository;
 
 import com.example.user_ingredient_service.entity.Ingredient;
 import com.example.user_ingredient_service.entity.User;
+import com.example.user_ingredient_service.test_container.Neo4jConfiguredContainer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.neo4j.core.Neo4jTemplate;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.Neo4jContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 import java.util.Set;
@@ -21,9 +17,8 @@ import static com.example.user_ingredient_service.generator.UserGeneratorUtil.cr
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "spring.profiles.active = test")
-@Testcontainers
 @Transactional
-class UserRepositoryTest {
+class UserRepositoryTest implements Neo4jConfiguredContainer {
 
     @Autowired
     private UserRepository userRepository;
@@ -36,17 +31,6 @@ class UserRepositoryTest {
 
     @Autowired
     private IngredientRepository ingredientRepository;
-
-    @Container
-    final static Neo4jContainer<?> container = new Neo4jContainer<>("neo4j:5")
-            .withAdminPassword("secretSecret");
-
-    @DynamicPropertySource
-    static void neo4jProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.neo4j.uri",container::getBoltUrl);
-        registry.add("spring.neo4j.authentication.username",()->"neo4j");
-        registry.add("spring.neo4j.authentication.password",container::getAdminPassword);
-    }
 
     @Test
     void testUserSaveShouldSaveValidUser() {

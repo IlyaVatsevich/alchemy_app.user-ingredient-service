@@ -33,10 +33,10 @@ public class IngredientServiceImpl implements IngredientService {
         Ingredient newIngredient;
         if (ingredientDto.getIngredientIds() == null || ingredientDto.getIngredientIds().isEmpty()) {
             newIngredient = ingredientRepository.save(newBasicIngredient(ingredientDto));
+            userIngredientService.addNewBasicIngredientToUsers(newIngredient);
         } else {
             newIngredient = ingredientRepository.save(newRecipeIngredient(ingredientDto));
         }
-        userIngredientService.addNewBasicIngredientToUsers(newIngredient);
         log.info("New ingredient with id: {} saved successfully.",newIngredient.getId());
     }
 

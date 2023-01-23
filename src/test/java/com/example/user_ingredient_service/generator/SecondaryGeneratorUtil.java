@@ -21,14 +21,27 @@ public class SecondaryGeneratorUtil {
     }
 
     public static Integer generatePositiveInteger() {
-        return RND.ints(0, Integer.MAX_VALUE).
-                findAny().
-                getAsInt();
+        return RND.ints(0, Integer.MAX_VALUE)
+                .findAny()
+                .getAsInt();
+    }
+
+    public static Integer generateNegativeInteger() {
+        return RND.ints(Integer.MIN_VALUE, -1)
+                .findAny()
+                .getAsInt();
     }
 
     public static Short generateShortForValidLossProbability() {
-        return ((short) RND.ints(0, 100).
-                findAny().
-                getAsInt());
+        return ((short) RND.ints(0, 100)
+                .findAny()
+                .getAsInt());
+    }
+
+    public static Short generateShortForInvalidLossProbability() {
+        return ((short) RND.ints(Short.MIN_VALUE, Short.MAX_VALUE)
+                .filter(value -> value>100||value<0)
+                .findAny()
+                .getAsInt());
     }
 }
