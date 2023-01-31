@@ -1,5 +1,6 @@
 package com.example.user_ingredient_service.mapper;
 
+import com.example.user_ingredient_service.dto.IngredientForNotification;
 import com.example.user_ingredient_service.dto.ingredient.IngredientCreateDto;
 import com.example.user_ingredient_service.dto.ingredient.IngredientResponseDto;
 import com.example.user_ingredient_service.entity.Ingredient;
@@ -8,6 +9,14 @@ import java.util.List;
 
 @Component
 public class IngredientMapper {
+
+    public IngredientForNotification mapIngredientToIngredientForNotification(Ingredient ingredient) {
+        return IngredientForNotification.builder()
+                .withLossProbability(ingredient.getLossProbability())
+                .withName(ingredient.getName())
+                .withPrice(Long.valueOf(ingredient.getPrice()))
+                .build();
+    }
 
     public Ingredient fromDtoToEntity(IngredientCreateDto ingredientDto) {
         return Ingredient.builder()

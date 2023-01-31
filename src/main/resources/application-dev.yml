@@ -16,6 +16,13 @@ spring:
     driver-class-name: org.neo4j.jdbc.bolt.BoltDriver
   liquibase:
     change-log: classpath:/db/changelog/changelog-master.xml
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      client-id: user-ingredient
+      acks: all
+      bootstrap-servers: localhost:9092
 user:
   start-gold: 100
 security-custom:
@@ -33,3 +40,16 @@ open_api:
       /api/v1/ingredient/**
     user_ingredient_path:
       /api/v1/user_ingredient/**
+kafka:
+  topic:
+    name: "notification_topic"
+    partitions: 10
+    replicas: 1
+task_custom:
+  execution:
+    pool:
+      core-size: 5
+      max-size: 10
+      queue-capacity: 25
+    shutdown:
+      await-termination: true

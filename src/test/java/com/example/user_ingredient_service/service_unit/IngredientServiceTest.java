@@ -9,6 +9,7 @@ import com.example.user_ingredient_service.generator.IngredientGeneratorUtil;
 import com.example.user_ingredient_service.mapper.IngredientMapper;
 import com.example.user_ingredient_service.repository.IngredientRepository;
 import com.example.user_ingredient_service.service.impl.IngredientServiceImpl;
+import com.example.user_ingredient_service.service.impl.NotificationProducerImpl;
 import com.example.user_ingredient_service.service.impl.UserIngredientServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +40,10 @@ class IngredientServiceTest {
     private IngredientMapper ingredientMapper;
     @Mock
     private UserIngredientServiceImpl userIngredientService;
+    @Mock
+    private NotificationProducerImpl notificationProducer;
+    @Mock
+    private TaskExecutor taskExecutor;
     private Ingredient ingredient;
     private IngredientCreateDto ingredientCreateDto;
 

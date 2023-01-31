@@ -1,5 +1,6 @@
 package com.example.user_ingredient_service.service.impl;
 
+import com.example.user_ingredient_service.dto.IngredientForNotification;
 import com.example.user_ingredient_service.dto.ingredient.IngredientCreateDto;
 import com.example.user_ingredient_service.dto.ingredient.IngredientResponseDto;
 import com.example.user_ingredient_service.entity.Ingredient;
@@ -7,10 +8,13 @@ import com.example.user_ingredient_service.exception.EntityNotExistException;
 import com.example.user_ingredient_service.mapper.IngredientMapper;
 import com.example.user_ingredient_service.repository.IngredientRepository;
 import com.example.user_ingredient_service.service.IngredientService;
+import com.example.user_ingredient_service.service.NotificationProducer;
 import com.example.user_ingredient_service.service.UserIngredientService;
 import jakarta.validation.ValidationException;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +30,8 @@ public class IngredientServiceImpl implements IngredientService {
     private final IngredientRepository ingredientRepository;
     private final IngredientMapper ingredientMapper;
     private final UserIngredientService userIngredientService;
+    private final NotificationProducer notificationProducer;
+    private final TaskExecutor taskExecutorCustom;
 
     @Override
     @Transactional
@@ -38,6 +44,7 @@ public class IngredientServiceImpl implements IngredientService {
             newIngredient = ingredientRepository.save(newRecipeIngredient(ingredientDto));
         }
         log.info("New ingredient with id: {} saved successfully.",newIngredient.getId());
+        taskExecutorCustom.execute(new NotificationRunnable(newIngredient));
     }
 
     @Override
@@ -65,5 +72,17 @@ public class IngredientServiceImpl implements IngredientService {
                 ingredientMapper.mapIngredientsToIngredientsCreatedFrom(ingredientsFromIngredientCreated);
         newRecipeIngredient.setIngredients(ingredientsCreatedFrom);
         return newRecipeIngredient;
+    }
+
+    @AllArgsConstructor
+    private class NotificationRunnable implements Runnable {
+
+        private final Ingredient newIngredient;
+
+        @Override
+        public void run() {
+            IngredientForNotification ingredientForNotification = ingredientMapper.mapIngredientToIngredientForNotification(newIngredient);
+            notificationProducer.sendNotificationAboutNewIngredient(ingredientForNotification);
+        }
     }
 }

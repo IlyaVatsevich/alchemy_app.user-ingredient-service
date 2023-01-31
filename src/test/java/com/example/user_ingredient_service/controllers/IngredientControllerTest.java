@@ -1,12 +1,14 @@
 package com.example.user_ingredient_service.controllers;
 
 import com.example.user_ingredient_service.dto.ingredient.IngredientResponseDto;
+import com.example.user_ingredient_service.mock.MockKafka;
 import com.example.user_ingredient_service.service.IngredientService;
 import com.example.user_ingredient_service.test_container.Neo4jConfiguredContainer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithUserDetails;;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -24,10 +26,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,properties = "spring.profiles.active = test")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {"spring.profiles.active = test",
+                "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration"})
 @AutoConfigureMockMvc
 @Transactional
-class IngredientControllerTest implements Neo4jConfiguredContainer {
+@ExtendWith(Neo4jConfiguredContainer.class)
+class IngredientControllerTest extends MockKafka {
 
     @Autowired
     private IngredientService ingredientService;

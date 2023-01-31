@@ -2,8 +2,10 @@ package com.example.user_ingredient_service.repository;
 
 import com.example.user_ingredient_service.entity.Ingredient;
 import com.example.user_ingredient_service.entity.User;
+import com.example.user_ingredient_service.mock.MockKafka;
 import com.example.user_ingredient_service.test_container.Neo4jConfiguredContainer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.neo4j.core.Neo4jTemplate;
@@ -16,9 +18,11 @@ import java.util.stream.Collectors;
 import static com.example.user_ingredient_service.generator.UserGeneratorUtil.createValidUser;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(properties = "spring.profiles.active = test")
+@SpringBootTest(properties = {"spring.profiles.active = test",
+        "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration"})
 @Transactional
-class UserRepositoryTest implements Neo4jConfiguredContainer {
+@ExtendWith(Neo4jConfiguredContainer.class)
+class UserRepositoryTest extends MockKafka {
 
     @Autowired
     private UserRepository userRepository;

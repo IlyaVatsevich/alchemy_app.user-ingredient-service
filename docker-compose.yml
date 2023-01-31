@@ -11,14 +11,20 @@ services:
       DATASOURCE_URI: bolt://neo4j-db:7687
       DATASOURCE_USERNAME: neo4j
       DATASOURCE_PASSWORD: secretSecret
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
     depends_on:
         neo4j-db:
           condition: service_healthy
+    networks:
+      - kafka-network
+      - alchemy-network
 
   neo4j-db:
       image: neo4j:5
       container_name: db
       restart: on-failure
+      depends_on:
+        - kafka
       ports:
         - "7474:7474"
         - "7687:7687"
@@ -33,3 +39,11 @@ services:
         interval: 10s
         timeout: 10s
         retries: 5
+      networks:
+        - alchemy-network
+
+networks:
+  kafka-network:
+    name: kafka-network
+  alchemy-network:
+    name: alchemy-network
